@@ -21,7 +21,13 @@ RUN dpkg -i puppet7-release-focal.deb
 RUN apt-get update && apt-get install -y \
     puppetserver \
     && rm -rf /var/lib/apt/lists/*
-    
+
+# Copy the "startup.sh" script from the local "./docker/" directory to the container.
+COPY docker/startup.sh /usr/local/bin/startup.sh
+
+# Give executable permissions to the "startup.sh" script to execute.
+RUN chmod +x /usr/local/bin/startup.sh
+
 # Starts the container by running the startup.sh script.
 CMD ["/usr/local/bin/startup.sh"]
 
