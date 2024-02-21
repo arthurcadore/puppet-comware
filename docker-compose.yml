@@ -1,0 +1,45 @@
+# Main composition file for SIG Application Container.
+# Author: Arthur Cadore M. Barcella
+# Github: arthurcadore
+# Capacitação Redes - PV Intelbras
+
+version: '3.8'
+services:
+
+   # First Sig application container.
+  sig_intelbras-1:
+    container_name: sig-distributed-1
+    # Map container ports 8080 and 8081.
+    ports:
+      - '8081:8081' # web Interface port
+      - '8080:8080' # webservice port
+    # Mount local directories as volumes inside the container:
+    volumes:
+      - "./app/config/log.properties:/usr/bin/imn/config/log.properties"
+      - "./app/imn-core.jar:/project/imn-core.jar"
+      - "./app/imn-webapp.jar:/project/imn-webapp.jar"
+      - "./logs:/project/logs"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - DATABASE_IP=database
+      - DATABASE_USER=youruser
+      - DATABASE_PASS=yourpassword
+
+#=============================================================
+   # Database container.
+  database:
+    container_name: database
+    environment:
+      - POSTGRES_PASSWORD=intelbras
+    build:
+      context: .
+      dockerfile: ./database/Dockerfile
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgres-data:/var/lib/postgresql/data'
+
+volumes:
+  postgres-data:

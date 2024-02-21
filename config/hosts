@@ -1,0 +1,3 @@
+10.132.14.239 puppetmaster puppet
+10.132.14.240 puppetclient1
+10.132.14.241 puppetclient2
