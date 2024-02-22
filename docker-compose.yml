@@ -47,7 +47,17 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - 'puppetdb-data:/var/lib/postgresql/data'
+      - 'database-data:/var/lib/postgresql/data'
 
+  # puppetAgent application container (for testing purposes).
+  puppetagent:
+    container_name: puppetagent
+    volumes:
+    #  - "./config/puppetAgent.conf:/etc/puppetlabs/puppet/puppet.conf"
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile-Agent
+
+  # Volume for database.
 volumes:
-  puppetdb-data:
+  database-data:
