@@ -15,7 +15,7 @@ services:
     # Map container volumes to puppet container:
     volumes:
       - "./config/hosts:/etc/hosts"
-     # - "./config/puppetserver:/etc/default/puppetserver"
+      - "./config/puppetserver:/etc/default/puppetserver"
     build:
       context: .
       dockerfile: ./app/Dockerfile
@@ -26,7 +26,7 @@ services:
 #    # Map container ports to puppet service:
 #    volumes:
 #      - "./config/jetty.ini:/etc/hosts"
-#      - "./config/puppet.conf:/etc/puppet/puppet.conf"
+#      - "./config/puppet.conf:/etc/puppet/puppet.conf"c
 #      - "./config/puppetdb.conf:/etc/puppet/puppetdb.conf"
 #      - "./config/routers.yaml:/etc/puppet/routes.yaml"
 #      - "./config/database.ini:/etc/puppetdb/conf.d/database.ini"
