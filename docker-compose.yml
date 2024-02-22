@@ -6,7 +6,7 @@
 version: '3.8'
 services:
 
-   # First Sig application container.
+   # puppetServer application container.
   puppetserver:
     container_name: puppet-server
     # Map container ports to puppet service:
@@ -18,4 +18,20 @@ services:
      # - "./config/puppetserver:/etc/default/puppetserver"
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./app/Dockerfile
+
+   # PostgreSQL application container.
+  puppetdb:
+    container_name: puppetdb-database
+    environment:
+      - POSTGRES_PASSWORD=yourpassword
+    build:
+      context: .
+      dockerfile: ./database/Dockerfile
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'puppetdb-data:/var/lib/postgresql/data'
+
+volumes:
+  puppetdb-data:

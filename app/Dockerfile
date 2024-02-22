@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the "startup.sh" script from the local "./docker/" directory to the container.
-COPY docker/startup.sh /usr/local/bin/startup.sh
+COPY app/startup.sh /usr/local/bin/startup.sh
 
 # Give executable permissions to the "startup.sh" script to execute.
 RUN chmod +x /usr/local/bin/startup.sh
