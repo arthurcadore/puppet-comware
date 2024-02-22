@@ -23,12 +23,6 @@ RUN apt-get update && apt-get install -y \
     puppetserver \
     && rm -rf /var/lib/apt/lists/*
 
-# Update repository and install puppet-database-lib-files;
-RUN apt-get update && apt-get install -y \
-    puppetdb \ 
-    puppetdb-terminus \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy the "startup.sh" script from the local "./docker/" directory to the container.
 COPY app/startup.sh /usr/local/bin/startup.sh
 

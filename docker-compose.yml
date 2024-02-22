@@ -20,21 +20,21 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
 
-   # puppetDB application container.
-  puppetdb:
-    container_name: puppetdb
-    # Map container ports to puppet service:
-    volumes:
-      - "./config/jetty.ini:/etc/hosts"
-      - "./config/puppet.conf:/etc/puppet/puppet.conf"
-      - "./config/puppetdb.conf:/etc/puppet/puppetdb.conf"
-      - "./config/routers.yaml:/etc/puppet/routes.yaml"
-      - "./config/database.ini:/etc/puppetdb/conf.d/database.ini"
-      - "./config/jetty.ini:/etc/puppetdb/conf.d/jetty.ini"
-      - "./config/puppetqd:/etc/default/puppetqd"
-    build:
-      context: .
-      dockerfile: ./puppetDB/Dockerfile
+# puppetDB application container.
+#  puppetdb:
+#    container_name: puppetdb
+#    # Map container ports to puppet service:
+#    volumes:
+#      - "./config/jetty.ini:/etc/hosts"
+#      - "./config/puppet.conf:/etc/puppet/puppet.conf"
+#      - "./config/puppetdb.conf:/etc/puppet/puppetdb.conf"
+#      - "./config/routers.yaml:/etc/puppet/routes.yaml"
+#      - "./config/database.ini:/etc/puppetdb/conf.d/database.ini"
+#      - "./config/jetty.ini:/etc/puppetdb/conf.d/jetty.ini"
+#      - "./config/puppetqd:/etc/default/puppetqd"
+#    build:
+#      context: .
+#      dockerfile: ./puppetDB/Dockerfile
 
    # PostgreSQL application container.
   database:
