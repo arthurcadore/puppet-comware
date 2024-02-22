@@ -52,7 +52,7 @@ services:
   # puppetAgent application container (for testing purposes).
   puppetagent:
     container_name: puppetagent
-    volumes:
+    #volumes:
     #  - "./config/puppetAgent.conf:/etc/puppetlabs/puppet/puppet.conf"
     build:
       context: .

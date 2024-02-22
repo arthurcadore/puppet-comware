@@ -7,10 +7,22 @@
 FROM ubuntu:20.04
 
 # Installing wget and nc packages; 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
+    curl \
     netcat \
+    libgcc-dev \
+    libssl-dev \
+    make \
+    build-essential \ 
     && rm -rf /var/lib/apt/lists/*
+
+
+# test configuration: 
+RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ focal main"
+
+RUN apt-get update && apt-get install -y libc6-2.31-0ubuntu3 \
+    libc6-dev-2.31-0ubuntu3
 
 # Collect repository library from puppetlabs;
 RUN wget https://apt.puppetlabs.com/puppet8-release-jammy.deb
