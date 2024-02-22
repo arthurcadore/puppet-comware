@@ -6,26 +6,26 @@
 # Use the base image "ubuntu:20.04":
 FROM ubuntu:20.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Installing wget and nc packages; 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    software-properties-common \
     wget \
     curl \
     netcat \
-    libgcc-dev \
-    libssl-dev \
     make \
     build-essential \ 
     && rm -rf /var/lib/apt/lists/*
 
-
-# test configuration: 
+# Add repository for libc6;
 RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ focal main"
-
-RUN apt-get update && apt-get install -y libc6-2.31-0ubuntu3 \
-    libc6-dev-2.31-0ubuntu3
+RUN apt-get update && apt-get install -y \
+    libc6 \
+    libc6-dev
 
 # Collect repository library from puppetlabs;
-RUN wget https://apt.puppetlabs.com/puppet7-release-focal.deb 
+RUN wget https://apt.puppetlabs.com/puppet8-release-focal.deb 
 
 # Install puppet7-release-focal.deb;
 RUN dpkg -i puppet7-release-focal.deb
