@@ -6,9 +6,10 @@
 # Use the base image "ubuntu:20.04":
 FROM ubuntu:20.04
 
-# Installing wget; 
+# Installing wget and nc packages; 
 RUN apt-get update && apt-get install -y \
     wget \
+    netcat \
     && rm -rf /var/lib/apt/lists/*
 
 # Collect repository library from puppetlabs;
