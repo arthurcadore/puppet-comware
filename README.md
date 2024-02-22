@@ -1,4 +1,4 @@
-# Puppet MasterNode and PuppetDB Application with Docker
+# Puppet MasterNode appliance with Docker
 
 Prerequisites
 Before you begin, ensure you have the following packages installed on your system:
