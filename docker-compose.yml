@@ -18,6 +18,7 @@ services:
       - puppetserver:/opt/puppetlabs/server/data/puppetserver
       - puppetserver-ssl:/etc/puppetlabs/puppet/ssl
       - puppetserver-ca:/etc/puppetlabs/puppetserver/ca
+      - "./config/auth.conf:/etc/puppetlabs/puppetserver/conf.d/auth.conf"
     # Map container environment variables to puppet container:
     environment:
       PUPPETSERVER_HOSTNAME: puppetserver
