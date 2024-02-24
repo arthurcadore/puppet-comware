@@ -4,5 +4,5 @@
 # Capacitação Redes - PV Intelbras
 
 # Use the official PostgreSQL image as base:
-FROM voxpupuli/puppetboard:5.3.0
+FROM voxpupuli/puppetboard:latest
 
