@@ -42,5 +42,5 @@ COPY puppetAgent/startup.sh /usr/local/bin/startup.sh
 # Give executable permissions to the "startupAgent.sh" script to execute.
 RUN chmod +x /usr/local/bin/startup.sh
 
-# Starts the container by running the startupAgent.sh script.
-CMD ["/usr/local/bin/startup.sh"]
+# Starts the container by running init systemd.
+CMD ["/usr/sbin/init"]
