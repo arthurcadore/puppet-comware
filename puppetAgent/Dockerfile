@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y \
 RUN wget https://apt.puppetlabs.com/puppet8-release-focal.deb 
 
 # Install puppet8-release-focal.deb;
-RUN dpkg -i puppet8-release-jammy.deb
+RUN dpkg -i puppet8-release-focal.deb 
 
 # Update repository and install puppet-server;
 RUN apt-get update && apt-get install -y \
