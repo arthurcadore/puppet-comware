@@ -4,7 +4,5 @@
 # Capacitação Redes - PV Intelbras
 
 # Use the official PostgreSQL image as base:
-FROM postgres:16-alpine
+FROM voxpupuli/puppetboard:5.3.0
 
-# Copy custom initialization script to the container:
-COPY database/setup.sql /docker-entrypoint-initdb.d/

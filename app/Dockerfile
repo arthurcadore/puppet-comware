@@ -3,44 +3,5 @@
 # Github: arthurcadore
 # Capacitação Redes - PV Intelbras
 
-# Use the base image "ubuntu:20.04":
-FROM ubuntu:20.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Installing wget and nc packages; 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    software-properties-common \
-    wget \
-    curl \
-    netcat \
-    make \
-    build-essential \ 
-    && rm -rf /var/lib/apt/lists/*
-
-# Add repository for libc6;
-RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ focal main"
-RUN apt-get update && apt-get install -y \
-    libc6 \
-    libc6-dev
-
-# Collect repository library from puppetlabs;
-RUN wget https://apt.puppetlabs.com/puppet8-release-focal.deb 
-
-# Install puppet7-release-focal.deb;
-RUN dpkg -i puppet7-release-focal.deb
-
-# Update repository and install puppet-server;
-RUN apt-get update && apt-get install -y \
-    puppetserver \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy the "startup.sh" script from the local "./docker/" directory to the container.
-COPY app/startup.sh /usr/local/bin/startup.sh
-
-# Give executable permissions to the "startup.sh" script to execute.
-RUN chmod +x /usr/local/bin/startup.sh
-
-# Starts the container by running the startup.sh script.
-CMD ["/usr/local/bin/startup.sh"]
-
+# Use the official PostgreSQL image as base:
+FROM voxpupuli/container-puppetserver:8.4.0-latest

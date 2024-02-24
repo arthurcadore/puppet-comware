@@ -8,56 +8,115 @@ services:
 
    # puppetServer application container.
   puppetserver:
-    container_name: puppet-server
+    container_name: puppetserver
+    hostname: puppetserver
     # Map container ports to puppet service:
     ports:
       - "8140:8140"
     # Map container volumes to puppet container:
     volumes:
-      - "./config/hosts:/etc/hosts"
-      - "./config/puppetserver:/etc/default/puppetserver"
+      - puppetserver:/opt/puppetlabs/server/data/puppetserver
+      - puppetserver-ssl:/etc/puppetlabs/puppet/ssl
+      - puppetserver-ca:/etc/puppetlabs/puppetserver/ca
+    # Map container environment variables to puppet container:
+    environment:
+      PUPPETSERVER_HOSTNAME: puppetserver
+      PUPPETSERVER_PORT: 8140
+      PUPPETDB_HOSTNAME: puppetdb
+      PUPPETDB_SSL_PORT: 8081
+      USE_PUPPETDB: true
+      AUTOSIGN: true
+      CSR_ATTRIBUTES: '{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'
+    restart: always
+    # Map container build context to puppet container:
     build:
       context: .
       dockerfile: ./app/Dockerfile
 
-# puppetDB application container.
-#  puppetdb:
-#    container_name: puppetdb
-#    # Map container ports to puppet service:
-#    volumes:
-#      - "./config/jetty.ini:/etc/hosts"
-#      - "./config/puppet.conf:/etc/puppet/puppet.conf"c
-#      - "./config/puppetdb.conf:/etc/puppet/puppetdb.conf"
-#      - "./config/routers.yaml:/etc/puppet/routes.yaml"
-#      - "./config/database.ini:/etc/puppetdb/conf.d/database.ini"
-#      - "./config/jetty.ini:/etc/puppetdb/conf.d/jetty.ini"
-#      - "./config/puppetqd:/etc/default/puppetqd"
-#    build:
-#      context: .
-#      dockerfile: ./puppetDB/Dockerfile
+  # puppetDB application container.
+  puppetdb:
+    container_name: puppetdb
+    hostname: puppetdb
+    # Map container ports to puppetdb service:
+    ports:
+      - 8081:8081
+    # Map container volumes to puppetdb container:
+    volumes:
+      - puppetdb:/opt/puppetlabs/server/data/puppetdb
+    # Map container volumes to puppetdb container:
+    environment:
+      USE_PUPPETSERVER: true
+      PUPPETSERVER_HOSTNAME: puppet
+      PUPPETSERVER_PORT: 8140
+      PUPPETDB_SSL_PORT: 8081
+      PUPPETDB_POSTGRES_HOSTNAME: database
+      PUPPETDB_POSTGRES_PORT: 5432
+      PUPPETDB_PASSWORD: ${POSTGRES_PASSWORD:-puppetdb}
+      PUPPETDB_USER: ${POSTGRES_USER:-puppetdb}
+    # Map container dependencies to puppetdb container:
+    depends_on:
+      - database
+      - puppetserver
+    restart: always
+    # Map container build context to puppetdb container:
+    build:
+      context: .
+      dockerfile: ./puppetDB/Dockerfile
 
-   # PostgreSQL application container.
+  # Database application container.
   database:
     container_name: database
+    hostname: database
+    # Map container ports to database service:
+    ports:
+      - "5432:5432"
+    # Map container volumes to database container:
+    volumes:
+      - 'database-data:/var/lib/postgresql/data'
+    # Map container environment variables to database container:
     environment:
-      - POSTGRES_PASSWORD=yourpassword
+      POSTGRES_DB: ${POSTGRES_DB:-puppetdb}
+      POSTGRES_USER: ${POSTGRES_USER:-puppetdb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-puppetdb}
+    # Helthcheck process to database container, to check if the user and database are ready/running.
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: always
+    # Map container build context to database container:
     build:
       context: .
       dockerfile: ./database/Dockerfile
-    ports:
-      - '5432:5432'
-    volumes:
-      - 'database-data:/var/lib/postgresql/data'
 
-  # puppetAgent application container (for testing purposes).
-  puppetagent:
-    container_name: puppetagent
-    #volumes:
-    #  - "./config/puppetAgent.conf:/etc/puppetlabs/puppet/puppet.conf"
+  # puppetBoard application container (web gui interface for puppet configuration).
+  puppetboard:
+    container_name: puppetboard
+    hostname: puppetboard
+    # Map container ports to puppetboard service:
+    ports:
+      - 8088:8088
+    # Map container environment variables to puppetboard container:
+    environment:
+      PUPPETDB_HOST: puppetdb
+      PUPPETDB_PORT: 8080
+      PUPPETBOARD_PORT: 8088
+      SECRET_KEY: ${SECRET_KEY}
+      # SECRET_KEY== Long random String : python3 -c 'import secrets; print(secrets.token_hex())'
+    restart: always
+    # Map container dependencies to puppetboard container:
+    depends_on:
+      - puppetdb
+    # Map container build context to puppetboard container:
     build:
       context: .
-      dockerfile: ./app/Dockerfile-Agent
-
-  # Volume for database.
+      dockerfile: ./puppetBoard/
+    
+# Volume for database and application
 volumes:
   database-data:
+  puppetserver:
+  puppetserver-ssl:
+  puppetserver-ca:
+  puppetdb:
