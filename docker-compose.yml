@@ -111,7 +111,7 @@ services:
     # Map container build context to puppetboard container:
     build:
       context: .
-      dockerfile: ./puppetBoard/
+      dockerfile: ./puppetBoard/Dockerfile
     
 # Volume for database and application
 volumes:
