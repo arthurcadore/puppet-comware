@@ -46,7 +46,7 @@ services:
     # Map container volumes to puppetdb container:
     environment:
       USE_PUPPETSERVER: true
-      PUPPETSERVER_HOSTNAME: puppet
+      PUPPETSERVER_HOSTNAME: puppetserver
       PUPPETSERVER_PORT: 8140
       PUPPETDB_SSL_PORT: 8081
       PUPPETDB_POSTGRES_HOSTNAME: database
@@ -97,6 +97,7 @@ services:
     # Map container ports to puppetboard service:
     ports:
       - 8088:8088
+      - 8080:8080
     # Map container environment variables to puppetboard container:
     environment:
       PUPPETDB_HOST: puppetdb
