@@ -1,7 +1,9 @@
-# Puppet MasterNode appliance with Docker
+# Distribuited Puppet Appliance with Docker
 
-Prerequisites
-Before you begin, ensure you have the following packages installed on your system:
+This repository contains all the components required to host a Puppet appliance using Docker. It provides scripts and configurations to set up the environment, manage the application's containers, and access both the application and its database.
+
+---
+Prerequisites, before you begin, ensure you have the following packages installed on your system:
 
 - Git version 2.34.1
 - Docker version 24.0.6, build ed223bc
@@ -34,22 +36,17 @@ If you don't have Docker (and Docker-compose) installed on your system yet, it c
 In sequence, configure the environment archives for the application containers, you can do this by edditing the files in `/config/` directory: 
 
 ```
-hosts -> Configure Hostnames for client nodes.
-puppet.conf -> Configure parameters for MasterNode Instace, as memory threshold. 
+auth.conf -> Configure ACL rules to access puppetMaster Node REST API. By default, the configuration is allow any operation by puppet Client. 
+
+pg_hba.conf -> Configure parameters for access PostgreSQL database externally, and permissions to change database data. By default, the configuration is allow any operation by anybody. 
 ```
-In `database.ini` file you'll need to configure the IP-address of your database, user and password. If you wanna to save in database externally, just point the new database IP-address. 
-
-Once you had configured the database user/password on `database.ini` file, go to `./database/setup.sql` file to match this parameters in the script that will configure the database container. 
+In sequence, configure `.env` file to your environment especifications: 
 
 ```
--- Create a new user with the password specified:
-CREATE USER youruser WITH PASSWORD 'yourpassword';
-
--- Alter ownership of the 'puppetdb' database to youruser:
-ALTER DATABASE imn OWNER TO youruser;
-
--- Allow your user to connect from any host
-ALTER USER youruser WITH SUPERUSER;
+POSTGRES_USER -> PostgreSQL user variable. 
+POSTGRES_PASSWORD = PostgreSQL password variable. 
+POSTGRES_DB = PostgreSQL database variable
+SECRET_KEY = Key used to connect PuppetDB backend container into PuppetBoard application container. 
 ```
 
 ### Start Application's Container: 
@@ -65,11 +62,9 @@ The "&" character creates a process id for the command inputed in, with means th
 
 ### Access Application:
 
-Once the container is up and running, you can access the application at por `TCP/8140`, as defined in the docker-compose.yml file.
+Once the container is up and running, your Puppet Agent Nodes can access the application at Host's `TCP/8140`, as defined in the section `puppetserver` of docker-compose.yml file. For web-gui application access, you can use `TCP/8088`, as defined in the section `puppetBoard` of docker-compose.yml file. 
 
-By default, the CLI access to the container is closed, so nobody can access it externally, only the application web Page. 
-
-To access the application command line, first loggin into host device using SSH or another method, then use the command below: 
+By default, the CLI access to the container is closed, so nobody can access it externally, only the application web Page.  To access the application command line, first loggin into host device using SSH or another method, then use the command below: 
 
 ```
 docker exec -it puppetserver bash
@@ -86,17 +81,15 @@ To exit from container's command line interface, use the command `exit`.
 By default, docker-compose.yml comes with a port mapping to expose the PostgreSQL port from database's container externally. The default port to PostgreSQL DB (which is the same that is mapped externally by default) is `5432`.
 
 
-So, to access the application database you can use any SQL client software, as [HeidiSQL](https://www.heidisql.com/) for example, the credentials are configured in `./database/setup.sql`. 
+So, to access the application database you can use any SQL client software, as [HeidiSQL](https://www.heidisql.com/) for example, the credentials are configured in the section `database` of docker-compose.yaml file. 
 
 --- 
 ### Stop Container: 
-To stop the running container, use the following command:
+To stop all running containers, you can use the following command:
 
 ```
 docker-compose down
 ```
-
-This command stops and removes the containers, networks, defined in the docker-compose.yml file.
 
 --- 
 
