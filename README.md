@@ -36,9 +36,11 @@ If you don't have Docker (and Docker-compose) installed on your system yet, it c
 In sequence, configure the environment archives for the application containers, you can do this by edditing the files in `/config/` directory: 
 
 ```
-auth.conf -> Configure ACL rules to access puppetMaster Node REST API. By default, the configuration is allow any operation by puppet Client. 
+auth.conf -> Configure ACL rules to access puppetMaster Node REST API. 
+By default, the configuration is allow any operation by puppet Client. 
 
-pg_hba.conf -> Configure parameters for access PostgreSQL database externally, and permissions to change database data. By default, the configuration is allow any operation by anybody. 
+pg_hba.conf -> Configure parameters for access PostgreSQL database externally, and permissions to change database data. 
+By default, the configuration is allow any operation by anybody. 
 ```
 In sequence, configure `.env` file to your environment especifications: 
 
