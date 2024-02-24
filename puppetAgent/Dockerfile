@@ -6,6 +6,9 @@
 # Use the base image "ubuntu:20.04":
 FROM ubuntu:20.04
 
+# Set the environment variable "DEBIAN_FRONTEND" to "noninteractive" to avoid any prompts during the installation of packages.
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Installing wget and nc packages; 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
