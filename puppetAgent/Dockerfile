@@ -36,11 +36,19 @@ RUN apt-get update && apt-get install -y \
     puppet-agent \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the "startupAgent.sh" script from the local "./docker/" directory to the container.
-COPY puppetAgent/startup.sh /usr/local/bin/startup.sh
 
-# Give executable permissions to the "startupAgent.sh" script to execute.
-RUN chmod +x /usr/local/bin/startup.sh
+# Install dependecies for H3C puppet library 
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.10.0
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.11.0
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.12.0
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.13.0
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.14.0
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.14.1
+RUN puppet module install puppetlabs-netdev_stdlib --version 0.15.0
+
+# Install puppet library: 
+
+RUN puppet module install h3c-netdev_stdlib --version 0.1.1 --force
 
 # Starts the container by running init systemd.
 CMD ["/usr/sbin/init"]

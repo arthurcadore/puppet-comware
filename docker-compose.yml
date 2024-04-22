@@ -116,12 +116,12 @@ services:
       context: .
       dockerfile: ./puppetBoard/Dockerfile
 
-  puppetagent:
-    container_name: puppetagent
-    hostname: puppetagent
-    build:
-      context: .
-      dockerfile: ./puppetAgent/Dockerfile
+#  puppetagent:
+#    container_name: puppetagent
+#    hostname: puppetagent
+#    build:
+#      context: .
+#      dockerfile: ./puppetAgent/Dockerfile
 
 # Volume for database and application
 volumes:
