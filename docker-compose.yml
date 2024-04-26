@@ -5,59 +5,16 @@
 
 version: '3.8'
 services:
-
    # puppetServer application container.
   puppetserver:
-    container_name: puppet-server
+    container_name: puppetserver
     # Map container ports to puppet service:
     ports:
       - "8140:8140"
     # Map container volumes to puppet container:
     volumes:
       - "./config/hosts:/etc/hosts"
-      - "./config/puppetserver:/etc/default/puppetserver"
+      - "./manifests/:/etc/puppet/modules/custom/manifests/"
     build:
       context: .
       dockerfile: ./app/Dockerfile
-
-# puppetDB application container.
-#  puppetdb:
-#    container_name: puppetdb
-#    # Map container ports to puppet service:
-#    volumes:
-#      - "./config/jetty.ini:/etc/hosts"
-#      - "./config/puppet.conf:/etc/puppet/puppet.conf"c
-#      - "./config/puppetdb.conf:/etc/puppet/puppetdb.conf"
-#      - "./config/routers.yaml:/etc/puppet/routes.yaml"
-#      - "./config/database.ini:/etc/puppetdb/conf.d/database.ini"
-#      - "./config/jetty.ini:/etc/puppetdb/conf.d/jetty.ini"
-#      - "./config/puppetqd:/etc/default/puppetqd"
-#    build:
-#      context: .
-#      dockerfile: ./puppetDB/Dockerfile
-
-   # PostgreSQL application container.
-  database:
-    container_name: database
-    environment:
-      - POSTGRES_PASSWORD=yourpassword
-    build:
-      context: .
-      dockerfile: ./database/Dockerfile
-    ports:
-      - '5432:5432'
-    volumes:
-      - 'database-data:/var/lib/postgresql/data'
-
-  # puppetAgent application container (for testing purposes).
-  puppetagent:
-    container_name: puppetagent
-    #volumes:
-    #  - "./config/puppetAgent.conf:/etc/puppetlabs/puppet/puppet.conf"
-    build:
-      context: .
-      dockerfile: ./app/Dockerfile-Agent
-
-  # Volume for database.
-volumes:
-  database-data:

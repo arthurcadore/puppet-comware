@@ -7,6 +7,7 @@ echo "Initializing puppetServer"
 /opt/puppetlabs/bin/puppetserver start &
 
 echo "verifing puppetServer status"
+
 # Function to check if the port is open
 check_port() {
     nc -z localhost 8140
