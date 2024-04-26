@@ -4,7 +4,7 @@
 # Capacitação Redes - PV Intelbras
 
 # Use the base image "capacita-puppet":
-FROM arthurcadore/capacita-puppet:1.0
+FROM arthurcadore/capacita-puppet:8.6.0
 
 # Copy the "startup.sh" script from the local "./docker/" directory to the container.
 COPY app/startup.sh /usr/local/bin/startup.sh
